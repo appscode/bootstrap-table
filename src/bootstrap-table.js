@@ -619,7 +619,16 @@
         this.$tableBody = this.$container.find('.fixed-table-body');
         this.$tableLoading = this.$container.find('.fixed-table-loading');
         this.$tableFooter = this.$container.find('.fixed-table-footer');
-        this.$toolbar = this.$container.find('.fixed-table-toolbar');
+        // checking if custom table-toolbar exists or not
+        this.hasCustomToolbar = this.$el.closest('body').find('.custom-table-toolbar');
+        if (this.hasCustomToolbar.length > 0) {
+            this.useCustomToolbar = true;
+            this.$toolbar = this.hasCustomToolbar;
+        } else {
+            this.useCustomToolbar = false;
+            this.$toolbar = this.$container.find('.fixed-table-toolbar');
+        }
+        // this.$toolbar = this.$container.find('.fixed-table-toolbar');
         this.$pagination = this.$container.find('.fixed-table-pagination');
 
         this.$tableBody.append(this.$el);
@@ -1046,7 +1055,8 @@
         if (this.$toolbar.find('.bs-bars').children().length) {
             $('body').append($(this.options.toolbar));
         }
-        this.$toolbar.html('');
+
+        // this.$toolbar.html('');
 
         if (typeof this.options.toolbar === 'string' || typeof this.options.toolbar === 'object') {
             $(sprintf('<div class="bs-bars pull-%s"></div>', this.options.toolbarAlign))
@@ -1169,16 +1179,18 @@
         }
 
         if (this.options.search) {
-            html = [];
-            html.push(
-                '<div class="pull-' + this.options.searchAlign + ' search">',
-                sprintf('<input class="form-control' +
+            if (!this.useCustomToolbar) {
+                html = [];
+                html.push(
+                  '<div class="pull-' + this.options.searchAlign + ' search">',
+                  sprintf('<input class="form-control' +
                     sprintf(' input-%s', this.options.iconSize) +
                     '" type="text" placeholder="%s">',
                     this.options.formatSearch()),
                 '</div>');
 
-            this.$toolbar.append(html.join(''));
+                this.$toolbar.append(html.join(''));
+            }
             $search = this.$toolbar.find('.search input');
             $search.off('keyup drop blur').on('keyup drop blur', function (event) {
                 if (that.options.searchOnEnterKey && event.keyCode !== 13) {
