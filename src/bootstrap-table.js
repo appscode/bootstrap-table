@@ -620,15 +620,15 @@
         this.$tableLoading = this.$container.find('.fixed-table-loading');
         this.$tableFooter = this.$container.find('.fixed-table-footer');
         // checking if custom table-toolbar exists or not
-        this.hasCustomToolbar = this.$el.closest('body').find('.custom-table-toolbar');
-        if (this.hasCustomToolbar.length > 0) {
-            this.useCustomToolbar = true;
+        if (this.options.customToolbar) {
+            var customToolbarClassName = this.options.customToolbar;
+            this.hasCustomToolbar = $('body').find('.' + customToolbarClassName);
+        }
+        if (this.hasCustomToolbar) {
             this.$toolbar = this.hasCustomToolbar;
         } else {
-            this.useCustomToolbar = false;
             this.$toolbar = this.$container.find('.fixed-table-toolbar');
         }
-        // this.$toolbar = this.$container.find('.fixed-table-toolbar');
         this.$pagination = this.$container.find('.fixed-table-pagination');
 
         this.$tableBody.append(this.$el);
@@ -1179,7 +1179,7 @@
         }
 
         if (this.options.search) {
-            if (!this.useCustomToolbar) {
+            if (!this.hasCustomToolbar) {
                 html = [];
                 html.push(
                   '<div class="pull-' + this.options.searchAlign + ' search">',
