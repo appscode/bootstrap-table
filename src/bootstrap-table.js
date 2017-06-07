@@ -1237,7 +1237,7 @@
 
         if (this.options.sidePagination !== 'server') {
             if (this.options.customSearch !== $.noop) {
-                this.options.customSearch.apply(this, [this.searchText]);
+                this.options['custom-search'].apply(this, [this.searchText]);
                 return;
             }
 
